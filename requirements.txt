@@ -1,0 +1,6 @@
+streamlit
+google-generativeai
+gtts
+speechrecognition
+pyaudio
+audio_recorder_streamlit

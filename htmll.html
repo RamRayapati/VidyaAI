@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoulMate.AGI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            overflow-x: hidden;
+            min-height: 100vh;
+            transition: background 0.5s;
+        }
+
+        /* Light Theme */
+        body.light {
+            background: linear-gradient(135deg, #e0e7ff, #c3e8ff);
+        }
+
+        body.light .header {
+            background: linear-gradient(45deg, #4b5e91, #7e8ce0);
+            color: white;
+            border-bottom: 4px solid #c3e8ff;
+        }
+
+        body.light .nav-link {
+            color: #e0e7ff;
+        }
+
+        body.light .nav-link:hover {
+            color: #c3e8ff;
+            background: rgba(255,255,255,0.2);
+            text-decoration: underline;
+        }
+
+        body.light .hero-banner, body.light .page-container {
+            background: linear-gradient(135deg, #4b5e91, #a5b4fc);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        body.light .mood-prompt {
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+
+        body.light .mood-prompt input, body.light .journal-input, body.light .search-input {
+            border: 1px solid #e0e7ff;
+            background: white;
+            color: #1e293b;
+        }
+
+        body.light .mood-prompt input:focus, body.light .journal-input:focus, body.light .search-input:focus {
+            box-shadow: 0 0 15px rgba(59,130,246,0.5);
+        }
+
+        body.light .emoji-buttons button, body.light .action-btn, body.light .wellness-btn, body.light .chat-btn {
+            background: linear-gradient(45deg, #3b82f6, #a5b4fc);
+            color: white;
+        }
+
+        body.light .home-card, body.light .card {
+            background: white;
+            border: 1px solid #e0e7ff;
+            color: #1e293b;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        body.light .home-card h3, body.light .card h3 {
+            color: #4b5e91;
+        }
+
+        body.light .home-card p, body.light .card p {
+            color: #6b7280;
+        }
+
+        body.light .chat-container {
+            background: #f9fafb;
+        }
+
+        body.light .chat-bubble-user {
+            background: #3b82f6;
+            color: white;
+        }
+
+        body.light .chat-bubble-ai {
+            background: #a5b4fc;
+            color: black;
+        }
+
+        body.light .input-bar {
+            background: rgba(255,255,255,0.9);
+            border-top: 1px solid #e5e7eb;
+        }
+
+        body.light .sentiment-meter {
+            background: rgba(255,255,255,0.8);
+            color: #4b5e91;
+        }
+
+        body.light .profile-options, body.light .settings-options {
+            background: white;
+            color: black;
+        }
+
+        body.light .profile-options a:hover, body.light .settings-options a:hover {
+            background: #e0e7ff;
+        }
+
+        body.light .footer {
+            background: linear-gradient(45deg, #4b5e91, #7e8ce0);
+            color: white;
+            border-top: 4px solid #c3e8ff;
+        }
+
+        /* Dark Theme */
+        body.dark {
+            background: linear-gradient(135deg, #1e293b, #334155);
+        }
+
+        body.dark .header {
+            background: linear-gradient(45deg, #0f172a, #1e3a8a);
+            color: #e0e7ff;
+            border-bottom: 4px solid #60a5fa;
+        }
+
+        body.dark .nav-link {
+            color: #93c5fd;
+        }
+
+        body.dark .nav-link:hover {
+            color: #60a5fa;
+            background: rgba(96,165,250,0.2);
+            text-decoration: underline;
+        }
+
+        body.dark .hero-banner, body.dark .page-container {
+            background: linear-gradient(135deg, #334155, #64748b);
+            color: #e0e7ff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        body.dark .mood-prompt {
+            background: #2d3748;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+
+        body.dark .mood-prompt input, body.dark .journal-input, body.dark .search-input {
+            border: 1px solid #4a5568;
+            background: #1e293b;
+            color: #e0e7ff;
+        }
+
+        body.dark .mood-prompt input:focus, body.dark .journal-input:focus, body.dark .search-input:focus {
+            box-shadow: 0 0 15px rgba(96,165,250,0.5);
+        }
+
+        body.dark .emoji-buttons button, body.dark .action-btn, body.dark .wellness-btn, body.dark .chat-btn {
+            background: linear-gradient(45deg, #60a5fa, #93c5fd);
+            color: #1e293b;
+        }
+
+        body.dark .home-card, body.dark .card {
+            background: #2d3748;
+            border: 1px solid #4a5568;
+            color: #e0e7ff;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+        }
+
+        body.dark .home-card h3, body.dark .card h3 {
+            color: #93c5fd;
+        }
+
+        body.dark .home-card p, body.dark .card p {
+            color: #cbd5e1;
+        }
+
+        body.dark .chat-container {
+            background: #334155;
+        }
+
+        body.dark .chat-bubble-user {
+            background: #3b82f6;
+            color: #e0e7ff;
+        }
+
+        body.dark .chat-bubble-ai {
+            background: #60a5fa;
+            color: #1e293b;
+        }
+
+        body.dark .input-bar {
+            background: rgba(30,41,59,0.9);
+            border-top: 1px solid #475569;
+        }
+
+        body.dark .sentiment-meter {
+            background: rgba(30,41,59,0.8);
+            color: #93c5fd;
+        }
+
+        body.dark .profile-options, body.dark .settings-options {
+            background: #2d3748;
+            color: #e0e7ff;
+        }
+
+        body.dark .profile-options a:hover, body.dark .settings-options a:hover {
+            background: #4a5568;
+        }
+
+        body.dark .footer {
+            background: linear-gradient(45deg, #0f172a, #1e3a8a);
+            color: #e0e7ff;
+            border-top: 4px solid #60a5fa;
+        }
+
+        /* Animations */
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+            50% { text-shadow: 0 0 20px rgba(59,130,246,0.8); }
+            100% { text-shadow: 0 0 10px rgba(255,255,255,0.5); }
+        }
+
+        @keyframes glow-dark {
+            0% { text-shadow: 0 0 10px rgba(147,197,253,0.5); }
+            50% { text-shadow: 0 0 20px rgba(96,165,250,0.8); }
+            100% { text-shadow: 0 0 10px rgba(147,197,253,0.5); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes bgShift {
+            0% { background-position: 20% 30%; }
+            50% { background-position: 80% 70%; }
+            100% { background-position: 20% 30%; }
+        }
+
+        /* General Styles */
+        .header {
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 48px;
+            color: white;
+            text-align: center;
+            flex: 1;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        body.dark .header h1 {
+            animation: glow-dark 2s ease-in-out infinite;
+        }
+
+        .right-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            font-size: 18px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .icons-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-container, .settings-container {
+            position: relative;
+        }
+
+        .profile-circle {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border: 3px solid #c3e8ff;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        body.dark .profile-circle {
+            border: 3px solid #60a5fa;
+        }
+
+        .profile-circle:hover {
+            transform: scale(1.1);
+        }
+
+        .settings-icon {
+            font-size: 30px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            color: white;
+        }
+
+        body.dark .settings-icon {
+            color: #e0e7ff;
+        }
+
+        .settings-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .profile-options, .settings-options {
+            display: none;
+            position: absolute;
+            top: 70px;
+            right: 0;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            padding: 10px;
+            z-index: 20;
+        }
+
+        .profile-options a, .settings-options a {
+            display: block;
+            padding: 5px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .home-container, .page-container {
+            padding: 40px;
+            text-align: center;
+            min-height: calc(100vh - 150px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dynamic-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle, rgba(75,94,145,0.2) 0%, rgba(30,41,59,0.1) 100%);
+            animation: bgShift 15s ease-in-out infinite;
+        }
+
+        body.dark .dynamic-bg {
+            background: radial-gradient(circle, rgba(30,41,59,0.8) 0%, rgba(15,23,42,0.5) 100%);
+        }
+
+        .hero-banner {
+            padding: 50px;
+            border-radius: 25px;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-in, pulse 4s infinite;
+        }
+
+        .page-container {
+            padding: 50px;
+            border-radius: 25px;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .hero-banner h1, .page-container h1 {
+            font-size: 56px;
+            margin: 0 0 20px;
+            font-family: 'Pacifico', cursive;
+            text-shadow: 0 0 20px rgba(59,130,246,0.8);
+        }
+
+        body.dark .hero-banner h1, body.dark .page-container h1 {
+            text-shadow: 0 0 20px rgba(96,165,250,0.8);
+        }
+
+        .hero-banner p, .page-container p {
+            font-size: 24px;
+            font-style: italic;
+            margin-bottom: 25px;
+        }
+
+        .hero-banner button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 18px;
+            box-shadow: 0 5px 15px rgba(59,130,246,0.5);
+        }
+
+        body.dark .hero-banner button {
+            background: #60a5fa;
+            color: #1e293b;
+            box-shadow: 0 5px 15px rgba(96,165,250,0.5);
+        }
+
+        .hero-banner button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(59,130,246,0.7);
+        }
+
+        .mood-prompt {
+            padding: 25px;
+            border-radius: 15px;
+            animation: float 3s infinite;
+            text-align: center;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        .mood-prompt h3 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            font-family: 'Pacifico', cursive;
+            color: #4b5e91;
+            text-shadow: 0 0 10px rgba(75,94,145,0.7);
+        }
+
+        body.dark .mood-prompt h3 {
+            color: #93c5fd;
+            text-shadow: 0 0 10px rgba(147,197,253,0.7);
+        }
+
+        .mood-prompt input {
+            width: 70%;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 10px 0;
+            transition: box-shadow 0.3s;
+            font-size: 16px;
+        }
+
+        .emoji-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .emoji-buttons button, .action-btn, .wellness-btn, .chat-btn {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            font-size: 16px;
+        }
+
+        .emoji-buttons button:hover, .action-btn:hover, .wellness-btn:hover, .chat-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        body.dark .emoji-buttons button:hover, body.dark .action-btn:hover, body.dark .wellness-btn:hover, body.dark .chat-btn:hover {
+            box-shadow: 0 6px 20px rgba(96,165,250,0.7);
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+            margin-top: 40px;
+        }
+
+        .home-card, .card {
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s;
+            text-align: center;
+            position: relative;
+            min-height: 200px;
+        }
+
+        .home-card:hover, .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(59,130,246,0.3);
+        }
+
+        body.dark .home-card:hover, body.dark .card:hover {
+            box-shadow: 0 10px 25px rgba(96,165,250,0.5);
+        }
+
+        .home-card h3, .card h3 {
+            font-size: 24px;
+            margin: 0 0 15px;
+        }
+
+        .home-card p, .card p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .mood-feedback {
+            text-align: center;
+            font-size: 20px;
+            padding: 15px;
+            color: #4b5e91;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        body.dark .mood-feedback {
+            color: #93c5fd;
+        }
+
+        .mood-feedback.show {
+            opacity: 1;
+        }
+
+        .chat-container {
+            height: 65vh;
+            overflow-y: auto;
+            padding: 20px;
+            border-radius: 10px;
+            transition: background 0.5s;
+        }
+
+        .chat-bubble-user {
+            border-radius: 15px 15px 0 15px;
+            padding: 10px 15px;
+            margin: 10px;
+            max-width: 60%;
+            align-self: flex-end;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            float: right;
+            clear: both;
+        }
+
+        .chat-bubble-ai {
+            border-radius: 15px 15px 15px 0;
+            padding: 10px 15px;
+            margin: 10px;
+            max-width: 60%;
+            align-self: flex-start;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            float: left;
+            clear: both;
+        }
+
+        .input-bar {
+            position: sticky;
+            bottom: 0;
+            padding: 15px;
+            display: flex;
+            gap: 15px;
+            border-radius: 10px;
+        }
+
+        .input-bar input {
+            flex: 8;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #e0e7ff;
+            font-size: 16px;
+        }
+
+        body.dark .input-bar input {
+            border: 1px solid #4a5568;
+            background: #1e293b;
+            color: #e0e7ff;
+        }
+
+        .input-bar button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .journal-input {
+            width: 100%;
+            height: 400px;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .sentiment-meter {
+            text-align: center;
+            font-size: 18px;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .expander {
+            background: #f9fafb;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        body.dark .expander {
+            background: #2d3748;
+        }
+
+        .expander details {
+            cursor: pointer;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+
+        .wellness-select {
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .chart-container {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .footer {
+            padding: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .footer a {
+            color: #c3e8ff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: center;
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 36px;
+                margin-bottom: 10px;
+            }
+
+            .right-container {
+                align-items: center;
+                width: 100%;
+            }
+
+            .nav-container {
+                justify-content: center;
+                gap: 10px;
+                padding-top: 5px;
+            }
+
+            .nav-link {
+                font-size: 16px;
+            }
+
+            .icons-container {
+                margin-bottom: 10px;
+            }
+
+            .home-container, .page-container {
+                padding: 20px;
+            }
+
+            .hero-banner, .page-container {
+                padding: 30px;
+            }
+
+            .hero-banner h1, .page-container h1 {
+                font-size: 40px;
+            }
+
+            .mood-prompt input, .journal-input, .search-input {
+                width: 90%;
+            }
+
+            .mood-prompt {
+                margin: 20px auto;
+            }
+
+            .actions-grid {
+                margin-top: 20px;
+            }
+
+            .chat-container {
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body class="light">
+    <!-- Header -->
+    <div class="header">
+        <h1>SoulMate.AGI</h1>
+        <div class="right-container">
+            <div class="icons-container">
+                <div class="profile-container">
+                    <img src="https://via.placeholder.com/60" class="profile-circle" id="profile-image" alt="Profile">
+                    <div class="profile-options" id="profile-options"></div>
+                </div>
+                <div class="settings-container">
+                    <div class="settings-icon">⚙</div>
+                    <div class="settings-options" id="settings-options">
+                        <a href="#" data-option="Light Theme">Light Theme</a>
+                        <a href="#" data-option="Dark Theme">Dark Theme</a>
+                        <a href="#" data-option="Help">Help</a>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-container">
+                <a class="nav-link" data-page="Home">Home</a>
+                <a class="nav-link" data-page="Chat">Chat</a>
+                <a class="nav-link" data-page="Journal">Journal</a>
+                <a class="nav-link" data-page="Wellness">Wellness</a>
+                <a class="nav-link" data-page="Memories">Memories</a>
+                <a class="nav-link" data-page="Insights">Insights</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pages -->
+    <div id="home-page" class="home-container">
+        <div class="dynamic-bg"></div>
+        <div class="hero-banner">
+            <h1>Welcome to SoulMate.AGI! 🌟</h1>
+            <p>Your journey to emotional well-being starts here. ✨</p>
+            <button class="action-btn" data-page="Chat">Begin Your Journey</button>
+        </div>
+        <div class="actions-grid">
+            <div class="home-card">
+                <h3>💬 Chat with Me</h3>
+                <p>Share your thoughts with personalized responses.</p>
+                <button class="action-btn" data-page="Chat">Go</button>
+            </div>
+            <div class="home-card">
+                <h3>✍ Write a Journal</h3>
+                <p>Reflect and gain AI insights.</p>
+                <button class="action-btn" data-page="Journal">Go</button>
+            </div>
+            <div class="home-card">
+                <h3>❤ Feel Better</h3>
+                <p>Enjoy affirmations and relaxation tools.</p>
+                <button class="action-btn" data-page="Wellness">Go</button>
+            </div>
+            <div class="home-card">
+                <h3>⏳ Recall Memories</h3>
+                <p>Relive your journey and grow.</p>
+                <button class="action-btn" data-page="Memories">Go</button>
+            </div>
+        </div>
+        <div class="mood-prompt">
+            <h3>How are you feeling today? 🌈</h3>
+            <input type="text" id="mood-input" placeholder="Tell me briefly...">
+            <div class="emoji-buttons">
+                <button class="emoji-btn" data-mood="Happy">Happy 😊</button>
+                <button class="emoji-btn" data-mood="Sad">Sad 😢</button>
+                <button class="emoji-btn" data-mood="Stressed">Stressed 😓</button>
+            </div>
+        </div>
+        <div class="mood-feedback" id="mood-feedback"></div>
+    </div>
+
+    <div id="chat-page" class="page-container hidden">
+        <div class="dynamic-bg"></div>
+        <h1>Chat with SoulMate.AGI</h1>
+        <div class="chat-container" id="chat-container"></div>
+        <div class="input-bar">
+            <input type="text" id="chat-input" placeholder="Talk to me...">
+            <button class="chat-btn" id="voice-btn">🎙</button>
+            <button class="chat-btn" id="video-btn">📷</button>
+            <button class="chat-btn" id="send-btn">➡</button>
+        </div>
+        <div style="display: flex; gap: 20px; margin-top: 20px; justify-content: center;">
+            <button class="chat-btn" id="quick-more">Tell me more</button>
+            <button class="chat-btn" id="quick-down">I'm feeling down</button>
+        </div>
+    </div>
+
+    <div id="journal-page" class="page-container hidden">
+        <div class="dynamic-bg"></div>
+        <h1>Your Journal</h1>
+        <p style="font-size: 14px;">🔒 Your thoughts are encrypted and private.</p>
+        <textarea class="journal-input" id="journal-input" placeholder="Write what's on your mind..."></textarea>
+        <div class="sentiment-meter">Sentiment: Neutral (updates as you type)</div>
+        <button class="action-btn" id="save-journal">Save Journal</button>
+        <div class="card" id="journal-feedback">
+            <p>That sounds heavy; want to talk?</p>
+            <button class="action-btn" data-page="Chat">Continue in Chat</button>
+        </div>
+        <details class="expander">
+            <summary>See Past Journals</summary>
+            <div id="past-journals">
+                <p>April 10, 2025: Feeling Hopeful</p>
+                <p>April 5, 2025: A tough day...</p>
+            </div>
+            <input type="text" class="search-input" id="journal-search" placeholder="By date or keyword">
+        </details>
+    </div>
+
+    <div id="wellness-page" class="page-container hidden">
+        <div class="dynamic-bg"></div>
+        <h1>Wellness Mode</h1>
+        <select class="wellness-select" id="wellness-select">
+            <option value="Affirmations">Affirmations</option>
+            <option value="Humor">Humor</option>
+            <option value="Breathing">Breathing Exercises</option>
+            <option value="Storytelling">Storytelling</option>
+            <option value="Music">Music Suggestions</option>
+        </select>
+        <div id="wellness-content"></div>
+    </div>
+
+    <div id="memories-page" class="page-container hidden">
+        <div class="dynamic-bg"></div>
+        <h1>Your Memories</h1>
+        <input type="text" class="search-input" id="memory-search" placeholder="What did I say about my job?">
+        <div id="memories-content">
+            <div class="card"><p><b>April 5, 2025</b>: You shared a happy moment about a friend.</p></div>
+            <div class="card"><p><b>April 1, 2025</b>: You felt stressed about work.</p></div>
+            <div class="card"><h3>Personal Growth</h3><p>You've been happier this month!</p></div>
+        </div>
+    </div>
+
+    <div id="insights-page" class="page-container hidden">
+        <div class="dynamic-bg"></div>
+        <h1>Your Insights</h1>
+        <div class="chart-container">
+            <canvas id="mood-chart"></canvas>
+        </div>
+        <div class="card">
+            <h3>Activity Summary</h3>
+            <p>40% Chat, 30% Journal, 20% Wellness, 10% Memories</p>
+        </div>
+        <button class="action-btn" id="export-btn">Export Encrypted Data</button>
+    </div>
+
+    <div id="help-page" class="page-container hidden">
+        <div class="dynamic-bg"></div>
+        <h1>Help - SoulMate.AGI</h1>
+        <div class="card">
+            <h3>About SoulMate.AGI</h3>
+            <p>SoulMate.AGI is your personalized, evolving AI companion designed to provide emotional support, companionship, and intelligent conversation. Built with advanced AI, it learns from your daily interactions to become a lifelong friend, mentor, and wellness guide.</p>
+            <h3>Features</h3>
+            <ul>
+                <li><b>Chat</b>: Talk anytime via text or voice, with empathetic responses tailored to your mood.</li>
+                <li><b>Journal</b>: Express your thoughts privately, with AI insights to support reflection.</li>
+                <li><b>Wellness</b>: Enjoy affirmations, humor, breathing exercises, stories, and music suggestions to uplift you.</li>
+                <li><b>Memories</b>: Recall past moments and track your personal growth.</li>
+                <li><b>Insights</b>: Visualize mood trends and activity patterns for self-awareness.</li>
+            </ul>
+            <h3>How It Works</h3>
+            <p>SoulMate.AGI starts with a powerful AI model and adapts nightly using your interactions, stored securely in an encrypted memory vault. It detects emotional cues to offer proactive support, especially for loneliness or stress.</p>
+            <h3>Privacy</h3>
+            <p>Your data is yours. All interactions are encrypted, and you can export your data anytime. We never share your information.</p>
+            <h3>Contact Us</h3>
+            <p>Need help? Reach out at support@soulmate.ai (placeholder).</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>
+            <a href="#">About SoulMate.AGI</a> | 
+            <a href="#">Privacy Policy</a> | 
+            <a href="#">Contact Us</a>
+        </p>
+        <p>Nightly Training: Last updated April 10, 2025</p>
+    </div>
+
+    <script>
+        // State Management
+        let state = {
+            page: localStorage.getItem('page') || 'Home',
+            chat_history: JSON.parse(localStorage.getItem('chat_history')) || [],
+            mood: localStorage.getItem('mood') || null,
+            logged_in: JSON.parse(localStorage.getItem('logged_in')) || false,
+            profile_image: localStorage.getItem('profile_image') || 'https://via.placeholder.com/60', // Uploaded/default image
+            google_profile_image: localStorage.getItem('google_profile_image') || null, // Google image
+            theme: localStorage.getItem('theme') || 'Light',
+            journals: JSON.parse(localStorage.getItem('journals')) || [
+                { date: 'April 10, 2025', content: 'Feeling Hopeful' },
+                { date: 'April 5, 2025', content: 'A tough day...' }
+            ]
+        };
+
+        // Initialize
+        document.body.classList.add(state.theme.toLowerCase());
+        updateProfileImage();
+
+        // Update Profile Image
+        function updateProfileImage() {
+            const profileImage = document.getElementById('profile-image');
+            if (state.logged_in && state.google_profile_image) {
+                profileImage.src = state.google_profile_image;
+            } else {
+                profileImage.src = state.profile_image;
+            }
+        }
+
+        // Profile Options
+        const profileImage = document.getElementById('profile-image');
+        const profileOptions = document.getElementById('profile-options');
+
+        const updateProfileOptions = () => {
+            if (!state.logged_in) {
+                profileOptions.innerHTML = `
+                    <a href="#" id="show-profile">Show Profile Picture</a>
+                    <a href="#" id="login-option">Log In</a>
+                `;
+                document.getElementById('show-profile').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    alert(Your current profile picture is: ${state.profile_image});
+                    profileOptions.style.display = 'none';
+                });
+                document.getElementById('login-option').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Simulate Google login (real OAuth requires backend)
+                    state.logged_in = true;
+                    state.google_profile_image = 'https://via.placeholder.com/60?text=Google+Profile'; // Mock Google image
+                    localStorage.setItem('logged_in', true);
+                    localStorage.setItem('google_profile_image', state.google_profile_image);
+                    updateProfileImage();
+                    updateProfileOptions();
+                    alert('Logged in with Google! (Simulated)');
+                    profileOptions.style.display = 'none';
+                });
+            } else {
+                profileOptions.innerHTML = `
+                    <a href="#" id="edit-profile">Edit Profile Image</a>
+                    <a href="#" id="logout">Log Out</a>
+                `;
+                document.getElementById('edit-profile').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const input = document.createElement('input');
+                    input.type = 'file';
+                    input.accept = 'image/png,image/jpeg';
+                    input.onchange = (event) => {
+                        const file = event.target.files[0];
+                        const reader = new FileReader();
+                        reader.onload = () => {
+                            state.profile_image = reader.result;
+                            localStorage.setItem('profile_image', state.profile_image);
+                            if (!state.logged_in) updateProfileImage();
+                            alert('Profile image updated!');
+                        };
+                        reader.readAsDataURL(file);
+                    };
+                    input.click();
+                    profileOptions.style.display = 'none';
+                });
+                document.getElementById('logout').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    state.logged_in = false;
+                    state.google_profile_image = null;
+                    localStorage.setItem('logged_in', false);
+                    localStorage.setItem('google_profile_image', null);
+                    updateProfileImage();
+                    updateProfileOptions();
+                    alert('Logged out!');
+                    profileOptions.style.display = 'none';
+                });
+            }
+        };
+
+        profileImage.addEventListener('click', () => {
+            profileOptions.style.display = profileOptions.style.display === 'block' ? 'none' : 'block';
+            settingsOptions.style.display = 'none';
+        });
+
+        updateProfileOptions();
+
+        // Settings Options
+        const settingsIcon = document.querySelector('.settings-icon');
+        const settingsOptions = document.getElementById('settings-options');
+
+        settingsIcon.addEventListener('click', () => {
+            settingsOptions.style.display = settingsOptions.style.display === 'block' ? 'none' : 'block';
+            profileOptions.style.display = 'none';
+        });
+
+        settingsOptions.addEventListener('click', (e) => {
+            const option = e.target.dataset.option;
+            if (option === 'Light Theme') {
+                state.theme = 'Light';
+                localStorage.setItem('theme', 'Light');
+                document.body.classList.remove('dark');
+                document.body.classList.add('light');
+            } else if (option === 'Dark Theme') {
+                state.theme = 'Dark';
+                localStorage.setItem('theme', 'Dark');
+                document.body.classList.remove('light');
+                document.body.classList.add('dark');
+            } else if (option === 'Help') {
+                switchPage('Help');
+            }
+            settingsOptions.style.display = 'none';
+            e.preventDefault();
+        });
+
+        // Page Navigation
+        const pages = ['home', 'chat', 'journal', 'wellness', 'memories', 'insights', 'help'];
+        const switchPage = (page) => {
+            state.page = page;
+            localStorage.setItem('page', page);
+            pages.forEach(p => {
+                document.getElementById(${p}-page).classList.add('hidden');
+            });
+            document.getElementById(${page.toLowerCase()}-page).classList.remove('hidden');
+            if (page === 'Chat') renderChat();
+            if (page === 'Journal') renderJournals();
+            if (page === 'Wellness') renderWellness();
+            if (page === 'Insights') renderChart();
+        };
+
+        document.querySelectorAll('.nav-link, .action-btn').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const page = el.dataset.page;
+                if (page) {
+                    switchPage(page);
+                    e.preventDefault();
+                }
+            });
+        });
+
+        switchPage(state.page);
+
+        // Home Page: Mood Handling
+        const moodInput = document.getElementById('mood-input');
+        const emojiButtons = document.querySelectorAll('.emoji-btn');
+        const moodFeedback = document.getElementById('mood-feedback');
+
+        moodInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const mood = moodInput.value.trim();
+                if (mood) {
+                    state.mood = mood;
+                    localStorage.setItem('mood', mood);
+                    moodFeedback.textContent = Thanks for sharing: ${mood}. How can I assist?;
+                    moodFeedback.classList.add('show');
+                    setTimeout(() => moodFeedback.classList.remove('show'), 3000);
+                    moodInput.value = '';
+                }
+            }
+        });
+
+        emojiButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const mood = button.dataset.mood;
+                state.mood = mood;
+                localStorage.setItem('mood', mood);
+                moodFeedback.textContent = Got it! You're feeling ${mood}. I'm here for you! 🎉;
+                moodFeedback.classList.add('show');
+                setTimeout(() => moodFeedback.classList.remove('show'), 3000);
+            });
+        });
+
+        // Chat Page
+        const renderChat = () => {
+            const chatContainer = document.getElementById('chat-container');
+            const chatBg = {
+                Happy: 'background: linear-gradient(135deg, #fefcbf, #fef9c3);',
+                Sad: 'background: linear-gradient(135deg, #bfdbfe, #dbeafe);',
+                Stressed: 'background: linear-gradient(135deg, #fecaca, #fee2e2);',
+                null: 'background: #f9fafb;'
+            }[state.mood] || 'background: #f9fafb;';
+            chatContainer.style = chatBg;
+            chatContainer.innerHTML = state.chat_history.map(msg => `
+                <div class="chat-bubble-${msg.role}">${msg.content}</div>
+            `).join('');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        };
+
+        document.getElementById('send-btn').addEventListener('click', () => {
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput.value.trim()) {
+                state.chat_history.push({ role: 'user', content: chatInput.value });
+                state.chat_history.push({ role: 'ai', content: I hear you! You said: ${chatInput.value} });
+                localStorage.setItem('chat_history', JSON.stringify(state.chat_history));
+                renderChat();
+                chatInput.value = '';
+            }
+        });
+
+        document.getElementById('chat-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') document.getElementById('send-btn').click();
+        });
+
+        document.getElementById('voice-btn').addEventListener('click', () => {
+            alert('Voice input coming soon!');
+        });
+
+        document.getElementById('video-btn').addEventListener('click', () => {
+            alert('Video input coming soon!');
+        });
+
+        document.getElementById('quick-more').addEventListener('click', () => {
+            state.chat_history.push({ role: 'user', content: 'Tell me more' });
+            state.chat_history.push({ role: 'ai', content: "Sure, what's on your mind?" });
+            localStorage.setItem('chat_history', JSON.stringify(state.chat_history));
+            renderChat();
+        });
+
+        document.getElementById('quick-down').addEventListener('click', () => {
+            state.chat_history.push({ role: 'user', content: "I'm feeling down" });
+            state.chat_history.push({ role: 'ai', content: "I'm here for you. Want to share more?" });
+            localStorage.setItem('chat_history', JSON.stringify(state.chat_history));
+            renderChat();
+        });
+
+        // Journal Page
+        const renderJournals = () => {
+            const pastJournals = document.getElementById('past-journals');
+            pastJournals.innerHTML = state.journals.map(j => <p>${j.date}: ${j.content}</p>).join('');
+        };
+
+        document.getElementById('save-journal').addEventListener('click', () => {
+            const journalInput = document.getElementById('journal-input');
+            if (journalInput.value.trim()) {
+                state.journals.push({
+                    date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+                    content: journalInput.value
+                });
+                localStorage.setItem('journals', JSON.stringify(state.journals));
+                renderJournals();
+                alert('Journal saved securely!');
+                journalInput.value = '';
+            }
+        });
+
+        document.getElementById('journal-search').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const pastJournals = document.getElementById('past-journals');
+            pastJournals.innerHTML = state.journals
+                .filter(j => j.date.toLowerCase().includes(query) || j.content.toLowerCase().includes(query))
+                .map(j => <p>${j.date}: ${j.content}</p>).join('');
+        });
+
+        // Wellness Page
+        const wellnessContent = {
+            Affirmations: `
+                <div class="card"><h3>You are enough.</h3></div>
+                <button class="wellness-btn" id="affirm-btn">New Affirmation</button>
+            `,
+            Humor: `
+                <div class="card"><p>Why did the computer go to therapy? It had an identity crisis!</p></div>
+                <button class="wellness-btn" id="joke-btn">Next Joke</button>
+            `,
+            Breathing: `
+                <div class="card"><p>Follow the circle: Inhale for 4, hold for 7, exhale for 8.</p></div>
+                <div style="width: 200px; height: 200px; border-radius: 50%; background: #a5b4fc; margin: auto;"></div>
+            `,
+            Storytelling: `
+                <div class="card"><p>Once upon a time, in a forest of code, a curious AI met a kind human...</p></div>
+                <button class="wellness-btn" id="story-btn">New Story</button>
+            `,
+            Music: `
+                <div class="card"><p>Try calming lo-fi beats for relaxation.</p></div>
+                <button class="wellness-btn" id="music-btn">Refresh</button>
+            `
+        };
+
+        const renderWellness = () => {
+            const wellnessSelect = document.getElementById('wellness-select');
+            const wellnessContentDiv = document.getElementById('wellness-content');
+            wellnessContentDiv.innerHTML = wellnessContent[wellnessSelect.value];
+            if (wellnessSelect.value === 'Affirmations') {
+                document.getElementById('affirm-btn').addEventListener('click', () => {
+                    wellnessContentDiv.innerHTML = `
+                        <div class="card"><h3>You are capable of amazing things.</h3></div>
+                        <button class="wellness-btn" id="affirm-btn">New Affirmation</button>
+                    `;
+                });
+            } else if (wellnessSelect.value === 'Humor') {
+                document.getElementById('joke-btn').addEventListener('click', () => {
+                    wellnessContentDiv.innerHTML = `
+                        <div class="card"><p>Why can't AI lie? It's programmed to tell the truth!</p></div>
+                        <button class="wellness-btn" id="joke-btn">Next Joke</button>
+                    `;
+                });
+            } else if (wellnessSelect.value === 'Storytelling') {
+                document.getElementById('story-btn').addEventListener('click', () => {
+                    wellnessContentDiv.innerHTML = `
+                        <div class="card"><p>In a quiet village, an AI learned the magic of friendship...</p></div>
+                        <button class="wellness-btn" id="story-btn">New Story</button>
+                    `;
+                });
+            } else if (wellnessSelect.value === 'Music') {
+                document.getElementById('music-btn').addEventListener('click', () => {
+                    wellnessContentDiv.innerHTML = `
+                        <div class="card"><p>How about classical piano for focus?</p></div>
+                        <button class="wellness-btn" id="music-btn">Refresh</button>
+                    `;
+                });
+            }
+        };
+
+        document.getElementById('wellness-select').addEventListener('change', renderWellness);
+
+        // Memories Page
+        document.getElementById('memory-search').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            const memoriesContent = document.getElementById('memories-content');
+            const memories = [
+                { date: 'April 5, 2025', content: 'You shared a happy moment about a friend.' },
+                { date: 'April 1, 2025', content: 'You felt stressed about work.' },
+                { date: null, content: 'Personal Growth: You\'ve been happier this month!', isGrowth: true }
+            ];
+            memoriesContent.innerHTML = memories
+                .filter(m => query === '' || m.content.toLowerCase().includes(query) || (m.date && m.date.toLowerCase().includes(query)))
+                .map(m => `
+                    <div class="card">
+                        ${m.isGrowth ? <h3>${m.content.split(': ')[0]}</h3><p>${m.content.split(': ')[1]}</p> : <p><b>${m.date}</b>: ${m.content}</p>}
+                    </div>
+                `).join('');
+        });
+
+        // Insights Page
+        const renderChart = () => {
+            const ctx = document.getElementById('mood-chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Apr 1', 'Apr 2', 'Apr 3', 'Apr 4', 'Apr 5'],
+                    datasets: [{
+                        label: 'Mood',
+                        data: [3, 2, 4, 3, 5],
+                        borderColor: '#3b82f6',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true, max: 5 }
+                    }
+                }
+            });
+        };
+
+        document.getElementById('export-btn').addEventListener('click', () => {
+            alert('Exporting data... (placeholder)');
+        });
+
+        // Title Animation
+        const title = document.querySelector('.header h1');
+        title.style.opacity = 0;
+        setTimeout(() => {
+            title.style.transition = 'opacity 1s';
+            title.style.opacity = 1;
+        }, 100);
+    </script>
+</body>
+</html>
